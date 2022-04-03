@@ -21,10 +21,6 @@ def main():
 
     password = "".join(password)
 
-    message = f"&{where}: {password}"
-    message = message.encode()
-
-    print(f"Generated password for {where}:\n{password}")
 
     key = load_key()
     fernet = Fernet(key)
@@ -33,7 +29,15 @@ def main():
     decrypted = fernet.decrypt(encrypted)
     write_file(decrypted)
 
-    with open("data.txt", "ab") as file:
+    with open("data.txt", "rb") as file:
+        output = file.read()
+    
+    message_dict = eval(output)
+    message_dict[where] = password
+    message = str(message_dict).encode()
+    print(f"Generated password for {where}:\n{password}")
+
+    with open("data.txt", "wb") as file:
         file.write(message)
 
     changed = read_file()
