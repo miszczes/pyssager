@@ -1,6 +1,10 @@
 import string
 import random
 import sys
+import pm_rw
+import bcolor
+import os
+import auth
 from cryptography.fernet import Fernet
 
 
@@ -8,6 +12,7 @@ characters = list(string.ascii_letters + string.digits + "!@#$%^*()")
 
 
 def main():
+    os.system('cls')
     where = sys.argv[1]
     length = int(sys.argv[2])
 
@@ -22,12 +27,12 @@ def main():
     password = "".join(password)
 
 
-    key = load_key()
+    key = pm_rw.load_key()
     fernet = Fernet(key)
 
-    encrypted = read_file()
+    encrypted = pm_rw.read_file()
     decrypted = fernet.decrypt(encrypted)
-    write_file(decrypted)
+    pm_rw.write_file(decrypted)
 
     with open("data.txt", "rb") as file:
         output = file.read()
@@ -40,25 +45,16 @@ def main():
     with open("data.txt", "wb") as file:
         file.write(message)
 
-    changed = read_file()
+    changed = pm_rw.read_file()
     encrypted = fernet.encrypt(changed)
-    write_file(encrypted)
-
-
-def load_key():
-    with open("C:/Users/Mikołaj/.en/filekey.key", "rb") as filekey:
-        return filekey.read()
-
-
-def read_file():
-    with open("data.txt", "rb") as enc_file:
-        return enc_file.read()
-
-
-def write_file(decrypted):
-    with open("data.txt", "wb") as dec_file:
-        dec_file.write(decrypted)
+    pm_rw.write_file(encrypted)
 
 
 if __name__ == "__main__":
-    main()
+    if auth.authentication():
+        main()
+        input(bcolor.bcolors.BOLD+"Press Enter to clear screen..."+bcolor.bcolors.ENDC)
+        os.system('cls')
+    else:
+        os.system('cls')
+        print(bcolor.bcolors.FAIL+"Incorrect Password!"+bcolor.bcolors.ENDC)
