@@ -32,18 +32,13 @@ def main():
 
     encrypted = pm_rw.read_file()
     decrypted = fernet.decrypt(encrypted)
-    pm_rw.write_file(decrypted)
-
-    with open("data.txt", "rb") as file:
-        output = file.read()
     
-    message_dict = eval(output)
+    message_dict = eval(decrypted)
     message_dict[where] = password
     message = str(message_dict).encode()
     print(f"Generated password for {where}:\n{password}")
 
-    with open("data.txt", "wb") as file:
-        file.write(message)
+    pm_rw.write_file(message)
 
     changed = pm_rw.read_file()
     encrypted = fernet.encrypt(changed)
