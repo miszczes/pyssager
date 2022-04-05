@@ -1,10 +1,10 @@
 import string
 import random
 import sys
-import pm_rw
-import bcolor
 import os
-import auth
+import utils.pm_rw as pm_rw
+import utils.bcolor as bcolor
+import utils.auth as auth
 from cryptography.fernet import Fernet
 
 
@@ -30,19 +30,26 @@ def main():
     key = pm_rw.load_key()
     fernet = Fernet(key)
 
-    encrypted = pm_rw.read_file()
-    decrypted = fernet.decrypt(encrypted)
-    
-    message_dict = eval(decrypted)
-    message_dict[where] = password
-    message = str(message_dict).encode()
+    if is_File_Not_Empty("C:/Users/Mikołaj/Desktop/python/worktools/passManager/data.txt"):
+        encrypted = pm_rw.read_file()
+        decrypted = fernet.decrypt(encrypted)
+        message_dict = eval(decrypted)
+        message = add_dict(message_dict, where, password)
+    else:
+        message_dict = {}
+        message = add_dict(message_dict, where, password)
+
     print(f"Generated password for {where}:\n{password}")
 
-    pm_rw.write_file(message)
-
-    changed = pm_rw.read_file()
-    encrypted = fernet.encrypt(changed)
+    encrypted = fernet.encrypt(message)
     pm_rw.write_file(encrypted)
+
+def is_File_Not_Empty(fpath: str):
+    return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
+
+def add_dict(dict: dict, where: str, password: str):
+    dict[where] = password
+    return str(dict).encode()
 
 
 if __name__ == "__main__":
