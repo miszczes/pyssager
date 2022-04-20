@@ -1,7 +1,7 @@
 import configparser
 
 config = configparser.ConfigParser()
-config.readfp(open(r"")) #config.ini filepath
+config.readfp(open(r"C:/Users/miszczes/Desktop/python/worktools/pyssager/config.ini")) #config.ini filepath
 authkey_path = config.get("file paths", "authkey_path")
 authfile_path = config.get("file paths", "authfile_path")
 filekey_path = config.get("file paths", "filekey_path")

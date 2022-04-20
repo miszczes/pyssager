@@ -8,7 +8,7 @@ import utils.auth as auth
 from cryptography.fernet import Fernet
 
 
-characters = list(string.ascii_letters + string.digits + "!@#$%^*()")
+characters = list(string.ascii_letters + string.digits + "!@#$%^*-()!@#$%^*-()!@#$%^*-()!@#$%^*-()")
 
 
 def main():
@@ -30,21 +30,21 @@ def main():
     key = pm_rw.load_key()
     fernet = Fernet(key)
 
-    if is_File_Not_Empty("C:/Users/Mikołaj/Desktop/python/worktools/passManager/data.txt"):
+    if is_File_Empty("C:/Users/Mikołaj/Desktop/python/worktools/passManager/data.txt"):
         encrypted = pm_rw.read_file()
         decrypted = fernet.decrypt(encrypted)
         message_dict = eval(decrypted)
         message = add_dict(message_dict, where, password)
     else:
-        message_dict = {}
-        message = add_dict(message_dict, where, password)
+        dict = {}
+        message = add_dict(dict, where, password)
 
     print(f"Generated password for {where}:\n{password}")
 
     encrypted = fernet.encrypt(message)
     pm_rw.write_file(encrypted)
 
-def is_File_Not_Empty(fpath: str):
+def is_File_Empty(fpath: str):
     return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
 
 def add_dict(dict: dict, where: str, password: str):
