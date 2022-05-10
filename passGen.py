@@ -31,13 +31,13 @@ def main():
     fernet = Fernet(key)
 
     if is_File_Empty("C:/Users/Mikołaj/Desktop/python/worktools/passManager/data.txt"):
+        dict = {}
+        message = add_dict(dict, where, password)
+    else:
         encrypted = pm_rw.read_file()
         decrypted = fernet.decrypt(encrypted)
         message_dict = eval(decrypted)
         message = add_dict(message_dict, where, password)
-    else:
-        dict = {}
-        message = add_dict(dict, where, password)
 
     print(f"Generated password for {where}:\n{password}")
 
